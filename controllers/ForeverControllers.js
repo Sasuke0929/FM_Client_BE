@@ -7,23 +7,24 @@ import twilio from 'twilio';
 const client = new twilio(TWILIO_ACCOUNT_ID, TWILIO_AUTH_TOKEN);
 
 export const savemessage = (req, res, next) => {
-	const sql = `INSERT INTO forevermessages (fromemail, toemail, from_mobilenumber, to_mobilenumber, subject, medianame, receiver_name, sending_date, message, message_status) VALUES ('${req.params.email}', '${req.body.data.email}', '${req.params.mobilenumber}', '${req.body.data.mobile}', '${req.body.data.subject}', '${req.file.filename}', '${req.body.data.name}', '${req.body.data.eventdate}', '${req.body.data.message}', false)`;
+	const {email, mobile, subject, name, eventdate, message} = JSON.parse(req.body.details);
+	const sql = `INSERT INTO forevermessages (fromemail, toemail, from_mobilenumber, to_mobilenumber, subject, medianame, receiver_name, sending_date, message, message_status) VALUES ('${req.params.email}', '${email}', '${req.params.mobilenumber}', '${mobile}', '${subject}', '${req.file.filename}', '${name}', '${eventdate}', '${message}', false)`;
 
-	db.query(sql, (err, response) => {
+	conn.query(sql, (err, response) => {
 		console.log('saved');
 	});
 }
 
-cron.schedule('1-5 * * * *', () => {
+cron.schedule('* * * * *', () => {
+	console.log(`running once more!`);
 	const newyear = new Date().getUTCFullYear();
 	const newmonth = new Date().getUTCMonth() + 1;
 	const newday = new Date().getUTCDate();
 	const sql = `select * from forevermessages where message_status = false AND YEAR(sending_date) = ${newyear} AND MONTH(sending_date) = ${newmonth} AND DAY(sending_date) = ${newday}`;
 
-	db.query(sql, (err, response) => {
-		if(response.length){
+	conn.query(sql, (err, response) => {
 			if(response.length === 0){
-
+				
 				//------------------- To email sending -------//
 				client.messages
 			      .create({
@@ -64,9 +65,6 @@ cron.schedule('1-5 * * * *', () => {
 				       })
 				      .then(message => console.log(message.sid));
 				})
-			}
-		}else{
-			return;
 		}
 	})
 })

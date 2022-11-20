@@ -51,6 +51,6 @@ router.post('/leavecomment/:id', comments.leavecomment);
 
 /-------------------------------  Send ForeverMessage Management --------------------------------/
 
-router.get('/savemessage/:email/:mobilenumber', upload.upload.single('file'), forever.savemessage);
+router.post('/savemessage/:email/:mobilenumber', upload.upload.single('file'), forever.savemessage);
 
 module.exports = router;
