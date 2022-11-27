@@ -38,7 +38,7 @@ router.post('/uploadmydata/:id', upload.upload.fields([{ name: 'file' , maxCount
 
 /-------------------------------  User Payment Management --------------------------------/
 
-router.post('/payment', payment.addon_payment);
+router.post('/create-payment-intent', payment.addon_payment);
 
 /-------------------------------  Contact_Us Management --------------------------------/
 
@@ -51,6 +51,7 @@ router.post('/leavecomment/:id', comments.leavecomment);
 
 /-------------------------------  Send ForeverMessage Management --------------------------------/
 
+router.get('/getfmmessage/:email/', forever.getfmmessage);
 router.post('/savemessage/:email/:mobilenumber', upload.upload.single('file'), forever.savemessage);
 
 module.exports = router;

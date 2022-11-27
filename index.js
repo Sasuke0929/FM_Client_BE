@@ -20,3 +20,12 @@ app.listen(SERVER_PORT, () => console.log(`Server running at ${SERVER_URI}:${SER
 //     if (err) throw err;
 //     console.log('MySQL Connected');
 // });
+
+// MongoDB connecting
+// mongoose.connect(`mongodb://${MONGODB_URI}:${MONGODB_PORT}/${MONGODB_NAME}`, {
+//    useNewUrlParser: true,
+//    useFindAndMidify: false,
+//    useUnifiedTopology: true
+// }, () => {
+//    console.log(`MongoDB connected at ${MONGODB_URI}:${MONGODB_PORT}`);
+// });

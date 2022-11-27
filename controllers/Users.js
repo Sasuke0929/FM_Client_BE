@@ -71,7 +71,7 @@ const HashPassword = password => {
 }
 
 export const login = (req, res, next) => {
-	const sql = `select * from users where email = '${req.body.detail.email}' limit 1`;
+	const sql = `select * from users where email = '${req.body.detail.email}'`;
 	conn.query(sql, (err, user) => {
 		if(user.length){
 			if(user[0].password !== HashPassword(req.body.detail.password)){
@@ -93,8 +93,9 @@ export const register = (req, res, next) => {
 			res.json({success: false, msg:'already existed!!'});
 		}else{
 			const sql1 = `INSERT INTO users (firstname, middlename, surname, placeofbirth, dateofbirth, dateofpassing, email, mobilenumber, password, isown, isverified) VALUES ('${req.body.details.firstname}', '${req.body.details.middlename}', '${req.body.details.surname}', '${req.body.details.placeofbirth}', '${req.body.details.dateofbirth}', '${req.body.details.dateofpassing}', '${req.body.details.email}', '${req.body.details.mobilenumber}', '${HashPassword(req.body.details.password)}', ${req.body.details.isowner}, true)`;
+			const sql2 = `INSERT INTO users (firstname, middlename, surname, placeofbirth, dateofbirth, email, mobilenumber, password, isown, isverified) VALUES ('${req.body.details.firstname}', '${req.body.details.middlename}', '${req.body.details.surname}', '${req.body.details.placeofbirth}', '${req.body.details.dateofbirth}', '${req.body.details.email}', '${req.body.details.mobilenumber}', '${HashPassword(req.body.details.password)}', ${req.body.details.isowner}, true)`;			
 
-			conn.query(sql1, (err, user) => {
+			conn.query(`${req.body.details.dateofpassing === '' ? sql2 : sql1}`, (err, user) => {
 				if(err) throw err;
 
 				res.json({success: true, newuser: user});

@@ -11,7 +11,7 @@ export const getcomments = (req, res, next) => {
 }
 
 export const leavecomment = (req, res, next) => {
-	const sql = `INSERT INTO comments (comment_id, firstname, lastname, comment) VALUES ('${req.params.id}', '${req.body.firstname}', '${req.body.lastname}', '${req.body.comment}')`;
+	const sql = `INSERT INTO comments (comment_id, firstname, lastname, comment) VALUES ('${req.params.id}', '${req.body.firstname}', '${req.body.lastname}', ${req.body.comment})`;
 
 	conn.query(sql, (err, response) => {
 		if (err) throw err;
