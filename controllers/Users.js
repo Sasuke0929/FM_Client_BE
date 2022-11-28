@@ -112,6 +112,22 @@ export const GetMyProfile = (req, res, next) => {
 	});
 }
 
+export const ChangeProfile = (req, res, next) => {
+	const sql = `UPDATE users SET firstname = '${req.body.first_name}', middlename = '${req.body.middle_name}',surname = '${req.body.sur_name}', dateofbirth = '${req.body.date_of_birth}', placeofbirth = '${req.body.place_of_birth}', dateofpassing = '${req.body.date_of_passing}' WHERE email = '${req.params.email}'`;
+
+	conn.query(sql, function(err, docs){
+		if(err) throw err;
+
+		docs.firstname = req.body.first_name;
+		docs.middlename = req.body.middle_name;
+		docs.surname = req.body.sur_name;
+		docs.dateofbirth = req.body.date_of_birth;
+		docs.placeofbirth = req.body.place_of_birth;
+		docs.dateofpassing = req.body.date_of_passing;
+		res.json(docs);
+	});
+}
+
 export const uploadsong = (req, res, next) => {
 	const sql = `UPDATE users SET profilesong = '${req.file.filename}', profile_uploaded_song_type = '${req.file.mimetype}' WHERE email = '${req.params.email}'`;
 
@@ -137,9 +153,50 @@ export const uploadimage = (req, res, next) => {
 }
 
 export const GetMyObituary = (req, res, next) => {
-	const sql = `select * from obituarys where id = ${req.params.id} limit 1`;
+	const sql = `select * from obituarys where obituary_id = ${req.params.id}`;
 
 	conn.query(sql, (err, response) => {
 		res.json(response[0]);
+	});
+}
+
+export const setobituary = (req, res, next) => {
+	const sql = `select * from obituarys where obituary_id = ${req.params.id}`;
+	conn.query(sql, function(err, docs){
+		if(docs.length){
+			const sql1 = `UPDATE obituarys SET obituary_about_you = '${req.body.obituary}' WHERE obituary_id = '${req.params.id}'`;
+
+			conn.query(sql1, function(err, docs){
+				if(err) throw err;
+
+				return res.json({success:true});
+			});
+		}else{
+			const sql1 = `INSERT INTO obituarys (obituary_id, obituary_about_you) VALUES ('${req.params.id}', '${req.body.obituary}')`;
+
+			conn.query(sql1, function(err, docs){
+				if(err) throw err;
+
+				return res.json({success:true});
+			});
+		}
+	});
+}
+
+export const setPrivate = (req, res, next) => {
+	const sql = `UPDATE users SET issecret = ${req.params.type} WHERE email = '${req.params.email}'`;
+	conn.query(sql, function(err, docs){
+		if(err) throw err;
+
+		return res.json({success:true});
+	});
+}
+
+export const setReview = (req, res, next) => {
+	const sql = `UPDATE users SET profilereview = ${req.body.review_num} WHERE id = '${req.params.id}'`;
+	conn.query(sql, function(err, docs){
+		if(err) throw err;
+
+		return;
 	});
 }

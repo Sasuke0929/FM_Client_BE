@@ -17,13 +17,20 @@ const router = express.Router();
 router.post('/login', user.login);
 router.post('/register', user.register);
 router.post('/emailverify', user.EmailVerification);
+
+/-------------------------------  User Profile Management --------------------------------/
+
 router.get('/getprofile/:id', user.GetMyProfile);
+router.get('/setPrivate/:email/:type', user.setPrivate);
+router.post('/changeprofile/:email', user.ChangeProfile);
 router.post('/uploadsong/:email', upload.upload.single('file'), user.uploadsong);
 router.post('/uploadimage/:email', upload.upload.single('file'), user.uploadimage);
+router.post('/setReview/:id', user.setReview);
 
 /-------------------------------  User Obituary Management --------------------------------/
 
 router.get('/getmyobituary/:id', user.GetMyObituary);
+router.post('/setobituary/:id', user.setobituary);
 
 /-------------------------------  User Timeline Management --------------------------------/
 
@@ -34,7 +41,7 @@ router.post('/uploadeventimage/:year/:month', upload.upload.single('file'), time
 /-------------------------------  User Photo_and_Video Management --------------------------------/
 
 router.get('/getmyphotoes/:id', photo_video.getmyphotoes);
-router.post('/uploadmydata/:id', upload.upload.fields([{ name: 'file' , maxCount:10}]), photo_video.uploadmydata);
+router.post('/uploadmydata/:id', upload.upload.fields([{ name: 'file' , maxCount:4}]), photo_video.uploadmydata);
 
 /-------------------------------  User Payment Management --------------------------------/
 
@@ -47,6 +54,7 @@ router.post('/contact_us', contact_us.sendEmail);
 /-------------------------------  User Comments Management --------------------------------/
 
 router.get('/getcomments/:id', comments.getcomments);
+router.get('/setComment/:id/:type', comments.setComment);
 router.post('/leavecomment/:id', comments.leavecomment);
 
 /-------------------------------  Send ForeverMessage Management --------------------------------/
